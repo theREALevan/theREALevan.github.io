@@ -33,7 +33,7 @@ redirect_from:
     </div>
     <!-- Right Column: Short Description and Links -->
     <div class="teaser-description" style="flex: 1; padding-left: 20px;">
-      <h3 style="margin-top: 0;">Apple Is All You Need</h3>
+      <h3 style="margin-top: 0;">VGGT with Extreme Rotation</h3>
       <p style="margin: 5px 0;">
         This project fine-tunes VGGT on a custom dataset and achieves state-of-the-art performance on extreme rotation prediction, incorporating novel attention weight analysis for enhanced model interpretability.
       </p>
