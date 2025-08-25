@@ -38,7 +38,7 @@ redirect_from:
         This project finetunes VGGT on a custom dataset and achieves state-of-the-art performance on extreme rotation prediction, incorporating novel attention weight analysis for enhanced model interpretability.
       </p>
       <!-- Links displayed side by side -->
-      <a href="" style="color: #007acc; text-decoration: none; font-weight: bold;">[GitHub (Coming Soon)]</a>
+      <a href="https://github.com/theREALevan/ComingSoon/" style="color: #007acc; text-decoration: none; font-weight: bold;">[GitHub (Coming Soon)]</a>
     </div>
   </div>
 
