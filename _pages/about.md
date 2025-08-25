@@ -11,13 +11,13 @@ redirect_from:
 <h2 style="font-size: 2em; margin: 0 0 20px 0;">Hello there, I'm Evan!</h2>
 
 <div class="about-section" style="margin: 20px 0; font-size: 1.2em; line-height: 1.4;">
-  <p>🏫 I'm currently an undergraduate student at 
-    <a href="https://www.cs.cornell.edu/" style="color: #007acc; text-decoration: none; font-weight: bold;">Cornell CS</a> where I've had the pleasure to be advised by<a href="https://abedavis.com/" style="color: #007acc; text-decoration: none; font-weight: bold;"> Abe Davis</a>.
+  <p>I'm currently a senior at 
+    <a href="https://www.cs.cornell.edu/" style="color: #007acc; text-decoration: none; font-weight: bold;">Cornell CS</a> pursuing B.A. in Computer Science. 
   </p>
-  <p>🔬 I am primarily interested in computer vision and graphics. Currently my focus is in 3D time-lapse on mobile platforms. I'm also a member of Cornell University Artificial Intelligence 
+  <p>My research encompasses 3D/4D computer vision and graphics. I am also an active member of Cornell University Artificial Intelligence 
     (<a href="https://cuai.github.io/" style="color: #007acc; text-decoration: none; font-weight: bold;">CUAI</a>).
   </p>
-  <p>🎾 In my free time I'm a big gym guy, an eight ball player, and a badminton enthusiast.</p>
+  <p>I am fortunate to be advised by Professor <a href="https://www.hadarelor.com/" style="color: #007acc; text-decoration: none; font-weight: bold;">Hadar Elor</a>. Previously I worked with Professor Abe Davis on time-lapse reconstruction on mobile platforms.</p>
 </div>
 
 <!-- Projects Section with ID for navigation -->
