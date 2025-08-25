@@ -28,7 +28,7 @@ redirect_from:
   <!-- Project 4 -->
   <div class="project-teaser" style="display: flex; align-items: flex-start; margin: 20px 0;">
     <!-- Left Column: Teaser Image -->
-    <div class="teaser-image" style="flex: 0 0 200px;">
+    <div class="teaser-image" style="flex: 0 0 300px;">
       <img src="/images/vggt.gif" alt="VGGT Teaser" style="width: 100%; border: 1px solid #ccc;">
     </div>
     <!-- Right Column: Short Description and Links -->
@@ -44,7 +44,7 @@ redirect_from:
   <!-- Project 1 -->
   <div class="project-teaser" style="display: flex; align-items: flex-start; margin: 20px 0;">
     <!-- Left Column: Teaser Image -->
-    <div class="teaser-image" style="flex: 0 0 200px;">
+    <div class="teaser-image" style="flex: 0 0 300px;">
       <img src="/images/ARSplat.gif" alt="ARSPLAT Teaser" style="width: 100%; border: 1px solid #ccc;">
     </div>
     <!-- Right Column: Short Description and Links -->
@@ -70,7 +70,7 @@ redirect_from:
   <!-- Project 1 -->
   <div class="project-teaser" style="display: flex; align-items: flex-start; margin: 20px 0;">
     <!-- Left Column: Teaser Image -->
-    <div class="teaser-image" style="flex: 0 0 200px;">
+    <div class="teaser-image" style="flex: 0 0 300px;">
       <img src="/images/grig2.gif" alt="GRIG Teaser" style="width: 100%; border: 1px solid #ccc;">
     </div>
     <!-- Right Column: Short Description and Links -->
@@ -96,7 +96,7 @@ redirect_from:
   <!-- Project 2 -->
   <div class="project-teaser" style="display: flex; align-items: flex-start; margin: 20px 0;">
     <!-- Left Column: Teaser Image -->
-    <div class="teaser-image" style="flex: 0 0 200px;">
+    <div class="teaser-image" style="flex: 0 0 300px;">
       <img src="/images/clickbait.png" alt="Gaussian_seg Teaser" style="width: 100%; border: 1px solid #ccc;">
     </div>
     <!-- Right Column: Short Description and Links -->
@@ -120,7 +120,7 @@ redirect_from:
   <!-- Project 3 -->
   <div class="project-teaser" style="display: flex; align-items: flex-start; margin: 20px 0;">
     <!-- Left Column: Teaser Image -->
-    <div class="teaser-image" style="flex: 0 0 200px;">
+    <div class="teaser-image" style="flex: 0 0 300px;">
       <img src="/images/TheOne .png" alt="Gaussian_seg Teaser" style="width: 100%; border: 1px solid #ccc;">
     </div>
     <!-- Right Column: Short Description and Links -->
@@ -143,7 +143,7 @@ redirect_from:
   <!-- Project 4 -->
   <div class="project-teaser" style="display: flex; align-items: flex-start; margin: 20px 0;">
     <!-- Left Column: Teaser Image -->
-    <div class="teaser-image" style="flex: 0 0 200px;">
+    <div class="teaser-image" style="flex: 0 0 300px;">
       <img src="/images/up.png" alt="Gaussian_seg Teaser" style="width: 100%; border: 1px solid #ccc;">
     </div>
     <!-- Right Column: Short Description and Links -->
