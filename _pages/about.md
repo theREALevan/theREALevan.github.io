@@ -17,7 +17,7 @@ redirect_from:
   <p>My research encompasses 3D/4D computer vision and graphics. I am also an active member of Cornell University Artificial Intelligence 
     (<a href="https://cuai.github.io/" style="color: #007acc; text-decoration: none; font-weight: bold;">CUAI</a>).
   </p>
-  <p>I am fortunate to be advised by Professor <a href="https://www.hadarelor.com/" style="color: #007acc; text-decoration: none; font-weight: bold;">Hadar Elor</a>. Previously I worked with Professor Abe Davis on time-lapse reconstruction on mobile platforms.</p>
+  <p>I am currently advised by Professor <a href="https://www.hadarelor.com/" style="color: #007acc; text-decoration: none; font-weight: bold;">Hadar Elor</a>. Previously, I collaborated with Professor Abe Davis on time-lapse reconstruction for mobile platforms.</p>
 </div>
 
 <!-- Projects Section with ID for navigation -->
