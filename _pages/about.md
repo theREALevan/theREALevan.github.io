@@ -33,7 +33,7 @@ redirect_from:
     </div>
     <!-- Right Column: Short Description and Links -->
     <div class="teaser-description" style="flex: 1; padding-left: 20px;">
-      <h3 style="margin-top: 0;">VGGT with Extreme Rotation</h3>
+      <h3 style="margin-top: 0;">VGGT with Extreme Rotation (WIP)</h3>
       <p style="margin: 5px 0;">
         This project fine-tunes VGGT on a custom dataset and achieves state-of-the-art performance on extreme rotation prediction, incorporating novel attention weight analysis for enhanced model interpretability.
       </p>
@@ -50,7 +50,7 @@ redirect_from:
     <!-- Right Column: Short Description and Links -->
     <div class="teaser-description" style="flex: 1; padding-left: 20px;">
       <!-- Title -->
-      <h3 style="margin-top: 0;">ARSplat: Mobile AR for Time-Lapse Tour (WIP)</h3>
+      <h3 style="margin-top: 0;">ARSplat: Mobile AR for Time-Lapse Tour</h3>
       <!-- Credit line: only the label "Credit:" is bolded -->
       <!-- <p class="credit" style="margin: 5px 0; font-size: 0.9em; color: #666;">
         <strong>Credit:</strong> Evan Zhang,
@@ -76,7 +76,7 @@ redirect_from:
     <!-- Right Column: Short Description and Links -->
     <div class="teaser-description" style="flex: 1; padding-left: 20px;">
       <!-- Title -->
-      <h3 style="margin-top: 0;">Auto-Riggable Gaussian Characters (WIP)</h3>
+      <h3 style="margin-top: 0;">Auto-Riggable Gaussian Characters</h3>
       <!-- Credit line: only the label "Credit:" is bolded -->
       <!-- <p class="credit" style="margin: 5px 0; font-size: 0.9em; color: #666;">
         <strong>Credit:</strong> Evan Zhang,
