@@ -154,6 +154,9 @@ redirect_from:
   <!-- List of Experiences -->
   <ul style="list-style-type: none; padding: 0;">
     <li style="margin-bottom: 10px;">
+        <strong>2025 Fall:</strong> TA for CS 4787: Principles of Large-Scale Machine Learning Systems
+    </li>
+    <li style="margin-bottom: 10px;">
       <strong>2025 Spring:</strong> TA for CS 4670: Introduction to Computer Vision
     </li>
     <li style="margin-bottom: 10px;">
