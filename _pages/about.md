@@ -94,6 +94,27 @@ redirect_from:
     </div>
   </div>
 
+  <div id="projects" class="projects-section">
+  <!-- Section Heading: Using similar style as Teaching Experiences -->
+  <h2 style="font-size: 2em; margin-bottom: 20px;">💻 Projects</h2>
+
+  <!-- Project 4 -->
+  <div class="project-teaser" style="display: flex; align-items: flex-start; margin: 20px 0;">
+    <!-- Left Column: Teaser Image -->
+    <div class="teaser-image" style="flex: 0 0 300px;">
+      <img src="/images/mpm-mls.gif" alt="MPM CPIC Teaser" style="width: 100%; border: 1px solid #ccc;">
+    </div>
+    <!-- Right Column: Short Description and Links -->
+    <div class="teaser-description" style="flex: 1; padding-left: 20px;">
+      <h3 style="margin-top: 0;">MLS-MPM and CPIC</h3>
+      <p style="margin: 5px 0;">
+        This project implements the Moving Least Squared Material Point Method, CPIC, various materials, and mesh extraction in 2D and 3D.
+      </p>
+      <!-- Links displayed side by side -->
+      <a href="https://github.com/zzigak/MPM-MLS-CPIC" style="color: #007acc; text-decoration: none; font-weight: bold;">[GitHub]</a>
+    </div>
+  </div>
+
   <!-- Project 2 -->
   <div class="project-teaser" style="display: flex; align-items: flex-start; margin: 20px 0;">
     <!-- Left Column: Teaser Image -->
