@@ -25,11 +25,27 @@ redirect_from:
   <!-- Section Heading: Using similar style as Teaching Experiences -->
   <h2 style="font-size: 2em; margin-bottom: 20px;">💻 Projects</h2>
 
+  <!-- Project 4 -->
+  <div class="project-teaser" style="display: flex; align-items: flex-start; margin: 20px 0;">
+    <!-- Left Column: Teaser Image -->
+    <div class="teaser-image" style="flex: 0 0 200px;">
+      <img src="/images/vggt.gif" alt="VGGT Teaser" style="width: 100%; border: 1px solid #ccc;">
+    </div>
+    <!-- Right Column: Short Description and Links -->
+    <div class="teaser-description" style="flex: 1; padding-left: 20px;">
+      <h3 style="margin-top: 0;">Apple Is All You Need</h3>
+      <p style="margin: 5px 0;">
+        This project fine-tunes VGGT on a custom dataset and achieves state-of-the-art performance on extreme rotation prediction, incorporating novel attention weight analysis for enhanced model interpretability.
+      </p>
+      <!-- Links displayed side by side -->
+    </div>
+  </div>
+
   <!-- Project 1 -->
   <div class="project-teaser" style="display: flex; align-items: flex-start; margin: 20px 0;">
     <!-- Left Column: Teaser Image -->
     <div class="teaser-image" style="flex: 0 0 200px;">
-      <img src="/images/ARSplat.gif" alt="GRIG Teaser" style="width: 100%; border: 1px solid #ccc;">
+      <img src="/images/ARSplat.gif" alt="ARSPLAT Teaser" style="width: 100%; border: 1px solid #ccc;">
     </div>
     <!-- Right Column: Short Description and Links -->
     <div class="teaser-description" style="flex: 1; padding-left: 20px;">
