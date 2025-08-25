@@ -25,7 +25,7 @@ redirect_from:
   <!-- Section Heading: Using similar style as Teaching Experiences -->
   <h2 style="font-size: 2em; margin-bottom: 20px;">💻 Projects</h2>
 
-  <!-- Project 4 -->
+  <!-- Project 1 -->
   <div class="project-teaser" style="display: flex; align-items: flex-start; margin: 20px 0;">
     <!-- Left Column: Teaser Image -->
     <div class="teaser-image" style="flex: 0 0 300px;">
@@ -42,7 +42,7 @@ redirect_from:
     </div>
   </div>
 
-  <!-- Project 1 -->
+  <!-- Project 2 -->
   <div class="project-teaser" style="display: flex; align-items: flex-start; margin: 20px 0;">
     <!-- Left Column: Teaser Image -->
     <div class="teaser-image" style="flex: 0 0 300px;">
@@ -68,7 +68,7 @@ redirect_from:
     </div>
   </div>
   
-  <!-- Project 1 -->
+  <!-- Project 3 -->
   <div class="project-teaser" style="display: flex; align-items: flex-start; margin: 20px 0;">
     <!-- Left Column: Teaser Image -->
     <div class="teaser-image" style="flex: 0 0 300px;">
@@ -93,11 +93,7 @@ redirect_from:
       <a href="/projects/grig.html" style="color: #007acc; text-decoration: none; font-weight: bold;">[Detail]</a>
     </div>
   </div>
-
-  <div id="projects" class="projects-section">
-  <!-- Section Heading: Using similar style as Teaching Experiences -->
-  <h2 style="font-size: 2em; margin-bottom: 20px;">💻 Projects</h2>
-
+  
   <!-- Project 4 -->
   <div class="project-teaser" style="display: flex; align-items: flex-start; margin: 20px 0;">
     <!-- Left Column: Teaser Image -->
@@ -115,7 +111,7 @@ redirect_from:
     </div>
   </div>
 
-  <!-- Project 2 -->
+  <!-- Project 5 -->
   <div class="project-teaser" style="display: flex; align-items: flex-start; margin: 20px 0;">
     <!-- Left Column: Teaser Image -->
     <div class="teaser-image" style="flex: 0 0 300px;">
@@ -139,7 +135,7 @@ redirect_from:
     </div>
   </div>
 
-  <!-- Project 3 -->
+  <!-- Project 6 -->
   <div class="project-teaser" style="display: flex; align-items: flex-start; margin: 20px 0;">
     <!-- Left Column: Teaser Image -->
     <div class="teaser-image" style="flex: 0 0 300px;">
@@ -162,7 +158,7 @@ redirect_from:
     </div>
   </div>
 
-  <!-- Project 4 -->
+  <!-- Project 7 -->
   <div class="project-teaser" style="display: flex; align-items: flex-start; margin: 20px 0;">
     <!-- Left Column: Teaser Image -->
     <div class="teaser-image" style="flex: 0 0 300px;">
