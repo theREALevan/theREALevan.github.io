@@ -33,7 +33,7 @@ redirect_from:
     </div>
     <!-- Right Column: Short Description and Links -->
     <div class="teaser-description" style="flex: 1; padding-left: 20px;">
-      <h3 style="margin-top: 0;">VGGT with Extreme Rotation (WIP)</h3>
+      <h3 style="margin-top: 0;">Redundancy in 3D Reconstruction Models Enables Robust Extreme Rotation Prediction (In Submission to CVPR 2026)</h3>
       <p style="margin: 5px 0;">
         This project finetunes VGGT on a custom dataset and achieves state-of-the-art performance on extreme rotation prediction, incorporating novel attention weight analysis for enhanced model interpretability.
       </p>
