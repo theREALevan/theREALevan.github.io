@@ -26,7 +26,7 @@ redirect_from:
   <h2 style="font-size: 2em; margin-bottom: 20px;">💻 Projects</h2>
 
   <!-- Project 1 -->
-  <div class="project-teaser" style="display: flex; align-items: flex-start; margin: 20px 0;">
+  <div class="project-teaser" style="display: flex; align-items: center; margin: 30px 0;">
     <!-- Left Column: Teaser Image -->
     <div class="teaser-image" style="flex: 0 0 300px;">
       <img src="/images/vggt.gif" alt="VGGT Teaser" style="width: 100%; border: 1px solid #ccc;">
@@ -44,7 +44,7 @@ redirect_from:
   </div>
 
   <!-- Project 2 -->
-  <div class="project-teaser" style="display: flex; align-items: flex-start; margin: 20px 0;">
+  <div class="project-teaser" style="display: flex; align-items: center; margin: 30px 0;">
     <!-- Left Column: Teaser Image -->
     <div class="teaser-image" style="flex: 0 0 300px;">
       <img src="/images/ARSplat.gif" alt="ARSPLAT Teaser" style="width: 100%; border: 1px solid #ccc;">
@@ -70,7 +70,7 @@ redirect_from:
   </div>
   
   <!-- Project 3 -->
-  <div class="project-teaser" style="display: flex; align-items: flex-start; margin: 20px 0;">
+  <div class="project-teaser" style="display: flex; align-items: center; margin: 30px 0;">
     <!-- Left Column: Teaser Image -->
     <div class="teaser-image" style="flex: 0 0 300px;">
       <img src="/images/grig2.gif" alt="GRIG Teaser" style="width: 100%; border: 1px solid #ccc;">
@@ -96,7 +96,7 @@ redirect_from:
   </div>
   
   <!-- Project 4 -->
-  <div class="project-teaser" style="display: flex; align-items: flex-start; margin: 20px 0;">
+  <div class="project-teaser" style="display: flex; align-items: center; margin: 30px 0;">
     <!-- Left Column: Teaser Image -->
     <div class="teaser-image" style="flex: 0 0 300px;">
       <img src="/images/mpm-mls.gif" alt="MPM CPIC Teaser" style="width: 100%; border: 1px solid #ccc;">
@@ -113,7 +113,7 @@ redirect_from:
   </div>
 
   <!-- Project 5 -->
-  <div class="project-teaser" style="display: flex; align-items: flex-start; margin: 20px 0;">
+  <div class="project-teaser" style="display: flex; align-items: center; margin: 30px 0;">
     <!-- Left Column: Teaser Image -->
     <div class="teaser-image" style="flex: 0 0 300px;">
       <img src="/images/clickbait.png" alt="Gaussian_seg Teaser" style="width: 100%; border: 1px solid #ccc;">
@@ -137,7 +137,7 @@ redirect_from:
   </div>
 
   <!-- Project 6 -->
-  <div class="project-teaser" style="display: flex; align-items: flex-start; margin: 20px 0;">
+  <div class="project-teaser" style="display: flex; align-items: center; margin: 30px 0;">
     <!-- Left Column: Teaser Image -->
     <div class="teaser-image" style="flex: 0 0 300px;">
       <img src="/images/TheOne .png" alt="Gaussian_seg Teaser" style="width: 100%; border: 1px solid #ccc;">
@@ -160,7 +160,7 @@ redirect_from:
   </div>
 
   <!-- Project 7 -->
-  <div class="project-teaser" style="display: flex; align-items: flex-start; margin: 20px 0;">
+  <div class="project-teaser" style="display: flex; align-items: center; margin: 30px 0;">
     <!-- Left Column: Teaser Image -->
     <div class="teaser-image" style="flex: 0 0 300px;">
       <img src="/images/up.png" alt="Gaussian_seg Teaser" style="width: 100%; border: 1px solid #ccc;">
