@@ -33,7 +33,7 @@ redirect_from:
     </div>
     <!-- Right Column: Short Description and Links -->
     <div class="teaser-description" style="flex: 1; padding-left: 20px;">
-      <h3 style="margin-top: 0; margin-bottom: 5px;">Redundancy in 3D Reconstruction Models Enables Robust Extreme Rotation Prediction</h3>
+      <h3 style="margin-top: 0; margin-bottom: 5px;">Emergent Extreme-View Geometry in 3D Foundation Models</h3>
       <p style="margin: 5px 0;">
         <strong>Yiwen Zhang</strong>, Joseph Tung, Ruojin Cai, David Fouhey, Hadar Elor
       </p>
