@@ -29,7 +29,7 @@ redirect_from:
   <div class="project-teaser" style="display: flex; align-items: center; margin: 30px 0;">
     <!-- Left Column: Teaser Image -->
     <div class="teaser-image" style="flex: 0 0 300px;">
-      <img src="/images/vggt.gif" alt="VGGT Teaser" style="width: 100%; border: 1px solid #ccc;">
+      <img src="/images/teaser.png" alt="VGGT Teaser" style="width: 100%; border: 1px solid #ccc;">
     </div>
     <!-- Right Column: Short Description and Links -->
     <div class="teaser-description" style="flex: 1; padding-left: 20px;">
