@@ -110,8 +110,7 @@ h2 {
 }
 
 .one {
-  width: 160px;
-  height: 160px;
+  width: 240px;
   position: relative;
 }
 
@@ -139,4 +138,15 @@ span.highlight {
     padding: 20px;
     display: inline-block;
     border-radius: 10px;
+}
+
+/* Reduce spacing between project rows */
+table tbody tr {
+    margin: 0;
+    padding: 0;
+}
+
+table tbody tr td p {
+    margin-top: 4px;
+    margin-bottom: 4px;
 }
