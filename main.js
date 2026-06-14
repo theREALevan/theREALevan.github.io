@@ -164,7 +164,7 @@
         var pr = photoEl.getBoundingClientRect();
         cx = pr.left + pr.width / 2 - cr.left;
         cy = pr.top + pr.height / 2 - cr.top;
-        R = pr.width * (mobile ? 0.8 : 0.95);
+        R = pr.width * (mobile ? 0.72 : 0.95);
       } else {
         cx = w * 0.78; cy = h * 0.5; R = Math.min(h * 0.42, 240);
       }
@@ -186,7 +186,7 @@
         var persp = 1.8 / (1.8 - zz);
         var sx = cx + x * R * persp;
         var sy = cy + yy * R * persp;
-        var fade = mobile ? 0.4 : Math.min(1, Math.max(0, (sx - fadeStart) / (fadeEnd - fadeStart)));
+        var fade = mobile ? 0.3 : Math.min(1, Math.max(0, (sx - fadeStart) / (fadeEnd - fadeStart)));
         var pr = proj[i];
         pr.x = sx; pr.y = sy; pr.z = zz;
         pr.depth = (zz + 1) / 2; pr.persp = persp; pr.fade = fade;
