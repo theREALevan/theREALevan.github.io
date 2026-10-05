@@ -270,6 +270,8 @@ a:focus-visible { color: var(--accent-strong); text-decoration-color: currentCol
   background: var(--accent-soft);
 }
 .social a svg { width: 15px; height: 15px; fill: currentColor; }
+/* Newsreader sits high in its line box; nudge the label so its cap height centres on the icon */
+.social a span { position: relative; top: 2px; }
 
 /* portrait — duotone that warms to colour on hover */
 .hero-photo { justify-self: center; }
@@ -322,7 +324,7 @@ a:focus-visible { color: var(--accent-strong); text-decoration-color: currentCol
   display: grid;
   grid-template-columns: 240px 1fr;
   gap: 32px;
-  align-items: start;
+  align-items: center;
   padding: 30px 0;
   border-bottom: 1px solid var(--hair);
 }
