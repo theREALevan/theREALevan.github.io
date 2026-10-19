@@ -222,3 +222,6 @@ dialog{color:#283533;background:#f3f0e7;border:0;border-radius:8px;max-height:88
  .world-view .nearby .eyebrow{font-size:10px}
  .world-view .drive-status{top:105px}
 }
+
+/* Match the shared view selector on the academic homepage. */
+.world-view .view-switch{background:#161e22}

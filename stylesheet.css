@@ -55,57 +55,50 @@ sup {
   right: 24px;
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 3px;
   width: max-content;
   max-width: 100%;
+  padding: 4px;
+  border: 1px solid #bdc9bd4d;
+  border-radius: 30px;
+  background: #161e22;
   font-family: 'DM Sans', Arial, sans-serif;
   font-size: 14px;
   line-height: 1.25;
+  white-space: nowrap;
 }
 .view-switch a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 44px;
-  padding: 8px 10px;
-  border-radius: 9px;
-  color: var(--muted);
-  white-space: nowrap;
+  min-height: 36px;
+  padding: 9px 15px;
+  border-radius: 24px;
+  color: #c4cec7;
   text-decoration: none;
 }
+.view-switch a.active {
+  background: #e9ebdf;
+  color: #263630;
+}
 .view-switch a:hover {
-  color: var(--accent);
+  background: #bdc9bd22;
+  color: #f1bd99;
 }
-.view-switch .world-link {
-  gap: 8px;
-  padding: 10px 14px;
-  border: 1px solid #c9d7e5;
-  background: #f5f8fc;
-  color: #315878;
-  font-weight: 500;
-  transition: background .18s, border-color .18s;
-}
-.view-switch .world-link:hover {
-  background: #eaf1f8;
-  border-color: #9db7cf;
-  color: #234967;
-}
-.world-link-icon {
-  flex: 0 0 20px;
-  width: 20px;
-  height: 20px;
-}
-.world-link-arrow {
-  font-size: 19px;
-  font-weight: 400;
-  line-height: 1;
+.view-switch a.active:hover {
+  background: #e9ebdf;
+  color: #263630;
 }
 .view-switch a:focus-visible {
   outline: 3px solid var(--accent);
   outline-offset: 4px;
 }
-@media (prefers-reduced-motion: reduce) {
-  .view-switch .world-link { transition: none; }
+@media (max-width: 760px) {
+  .view-switch { font-size: 12px; padding: 3px; gap: 1px; }
+  .view-switch a { min-height: 32px; padding: 8px 9px; }
+}
+@media (max-width: 360px) {
+  .view-switch a { padding: 8px 7px; }
 }
 
 /* ---------- Intro ---------- */
@@ -239,13 +232,7 @@ footer a {
   .view-switch {
     position: static;
     display: flex;
-    gap: 8px;
     margin: 0 0 26px auto;
-    font-size: 14px;
-  }
-  .view-switch .world-link {
-    gap: 7px;
-    padding: 10px 13px;
   }
   .intro {
     display: grid;

@@ -72,7 +72,7 @@ with sync_playwright() as p:
     page.locator('h1.name').wait_for()
     page.evaluate('Promise.race([document.fonts.ready, new Promise(resolve=>setTimeout(resolve,2000))])')
     check('default page is classic academic homepage', page.locator('h1.name').inner_text() == 'Yiwen (Evan) Zhang' and page.locator('.paper').count() == 4 and page.locator('#world').count() == 0)
-    check('academic homepage has one World entry without a redundant Classic label', page.locator('.view-switch a').count() == 1 and page.locator('.view-switch a[href="world.html"]').count() == 1)
+    check('academic homepage shares the Classic / World switch and highlights Classic', page.locator('.view-switch a').count() == 2 and page.locator('.view-switch [aria-current="page"]').inner_text() == 'Classic')
     screenshot(page, 'classic-1440')
     viewport_check(page, 'classic desktop no horizontal overflow', fixed=False)
     for width, height in [(390, 844), (320, 740)]:

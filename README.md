@@ -1,6 +1,6 @@
 # Yiwen (Evan) Zhang
 
-An academic homepage with two views of the same research. The default [Classic view](index.html) presents the biography and publication list. The alternate [3D World](world.html) places those publications on a tiny lunar planet, where visitors can drive a rover between research flags, watch floating previews, and open paper details. Both views share the same identity; the academic homepage has a single **Explore 3D World ↗** entry. [classic.html](classic.html) remains a legacy route to the classic homepage.
+An academic homepage with two views of the same research. The default [Classic view](index.html) presents the biography and publication list. The alternate [3D World](world.html) places those publications on a tiny lunar planet, where visitors can drive a rover between research flags, watch floating previews, and open paper details. Both views share the same identity; both pages use the same **Classic / 3D World** switch, with the current view highlighted. [classic.html](classic.html) remains a legacy route to the classic homepage.
 
 ## Run locally
 
