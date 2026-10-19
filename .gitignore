@@ -1,2 +1,6 @@
 .nfs*
 .DS_Store
+
+# Generated local browser verification reports
+/tools/*-check*.json
+/tools/__pycache__/

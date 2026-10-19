@@ -42,9 +42,70 @@ sup {
 }
 
 .page {
+  position: relative;
   max-width: 820px;
   margin: 0 auto;
-  padding: 64px 24px 40px;
+  padding: 92px 24px 40px;
+}
+
+/* ---------- Alternate view ---------- */
+.view-switch {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  width: max-content;
+  max-width: 100%;
+  font-family: 'DM Sans', Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.25;
+}
+.view-switch a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 8px 10px;
+  border-radius: 9px;
+  color: var(--muted);
+  white-space: nowrap;
+  text-decoration: none;
+}
+.view-switch a:hover {
+  color: var(--accent);
+}
+.view-switch .world-link {
+  gap: 8px;
+  padding: 10px 14px;
+  border: 1px solid #c9d7e5;
+  background: #f5f8fc;
+  color: #315878;
+  font-weight: 500;
+  transition: background .18s, border-color .18s;
+}
+.view-switch .world-link:hover {
+  background: #eaf1f8;
+  border-color: #9db7cf;
+  color: #234967;
+}
+.world-link-icon {
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
+}
+.world-link-arrow {
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1;
+}
+.view-switch a:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .view-switch .world-link { transition: none; }
 }
 
 /* ---------- Intro ---------- */
@@ -152,9 +213,14 @@ h2::after {
 
 footer {
   margin-top: 64px;
+  padding-top: 20px;
+  border-top: 1px solid var(--rule);
   color: var(--muted);
   font-size: 0.8em;
   text-align: right;
+}
+footer p {
+  margin: 0 0 5px;
 }
 footer a {
   color: inherit;
@@ -168,7 +234,18 @@ footer a {
     font-size: 17.5px;
   }
   .page {
-    padding: 32px 18px 32px;
+    padding: 24px 18px 32px;
+  }
+  .view-switch {
+    position: static;
+    display: flex;
+    gap: 8px;
+    margin: 0 0 26px auto;
+    font-size: 14px;
+  }
+  .view-switch .world-link {
+    gap: 7px;
+    padding: 10px 13px;
   }
   .intro {
     display: grid;

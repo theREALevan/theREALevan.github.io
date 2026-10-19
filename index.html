@@ -9,14 +9,18 @@
 
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="stylesheet.css?v=20261019b">
+    <link rel="stylesheet" href="assets/fonts/fonts.css?v=20261019-local-fonts">
+    <link rel="stylesheet" type="text/css" href="stylesheet.css?v=20261019-refined-entry">
   </head>
 
   <body>
     <main class="page">
+      <nav class="view-switch" aria-label="Explore the research in 3D">
+        <a class="world-link" href="world.html">
+          <svg class="world-link-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="6.4" stroke="currentColor" stroke-width="1.5"/><ellipse cx="12" cy="12" rx="11" ry="3.4" transform="rotate(-28 12 12)" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="9" r="1.1" fill="currentColor"/></svg>
+          <span>Explore 3D World</span><span class="world-link-arrow" aria-hidden="true">↗</span>
+        </a>
+      </nav>
 
       <header class="intro">
         <div class="intro-text">
@@ -147,7 +151,9 @@
       </section>
 
       <footer>
-        Website template from <a href="https://github.com/jonbarron/jonbarron_website">Jon Barron</a>.
+        <p><a href="https://github.com/theREALevan/theREALevan.github.io">Website source</a> · 3D powered by <a href="https://threejs.org/">Three.js</a></p>
+        <p>Driving interaction inspired by <a href="https://bruno-simon.com/">Bruno Simon</a>.</p>
+        <p>Website template from <a href="https://github.com/jonbarron/jonbarron_website">Jon Barron</a>.</p>
       </footer>
 
     </main>
