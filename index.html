@@ -10,7 +10,7 @@
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="stylesheet" href="assets/fonts/fonts.css?v=20261019-local-fonts">
-    <link rel="stylesheet" type="text/css" href="stylesheet.css?v=20261019-unified-switch">
+    <link rel="stylesheet" type="text/css" href="stylesheet.css?v=20261019-light-switch">
   </head>
 
   <body>
@@ -100,7 +100,7 @@
 
         <div class="paper">
           <a class="paper-media" href="https://cornell-vailab.github.io/ArchWorld/">
-            <video src="images/archworld.mp4" autoplay muted loop playsinline preload="metadata" aria-label="ArchWorld teaser"></video>
+            <video src="images/archworld.mp4" data-playback-rate="2" autoplay muted loop playsinline preload="metadata" aria-label="ArchWorld teaser"></video>
           </a>
           <div class="paper-info">
             <a class="paper-title" href="https://cornell-vailab.github.io/ArchWorld/">Towards Reconstructing Geographically Diverse Architecture with 3D Foundation Models</a>
@@ -156,6 +156,12 @@
 
     </main>
 
+    <script>
+      document.querySelectorAll('video[data-playback-rate]').forEach(video => {
+        video.defaultPlaybackRate = Number(video.dataset.playbackRate) || 1;
+        video.playbackRate = video.defaultPlaybackRate;
+      });
+    </script>
     <!-- GoatCounter analytics -->
     <script data-goatcounter="https://lilevanezz.goatcounter.com/count"
             async src="//gc.zgo.at/count.js"></script>

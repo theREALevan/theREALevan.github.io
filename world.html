@@ -8,7 +8,7 @@
   <title>Yiwen (Evan) Zhang — 3D View</title>
   <link rel="icon" href="favicon.png">
   <link rel="stylesheet" href="assets/fonts/fonts.css?v=20261019-local-fonts">
-  <link rel="stylesheet" href="world/style.css?v=20261019-preview-fit">
+  <link rel="stylesheet" href="world/style.css?v=20261019-world-polish">
 </head>
 <body class="world-view exploring">
   <a class="skip-link" href="./">Skip to the accessible academic homepage</a>
@@ -25,7 +25,7 @@
   <main>
     <div id="station-labels" aria-label="Research outposts"></div>
     <div id="loading" class="loading" role="status">Preparing your rover<span class="loading-dots">…</span><a href="./">Read the research while you wait ↗</a></div>
-    <div id="fallback" class="fallback" hidden><h2>The research is still here.</h2><p>This browser couldn’t start the 3D world. Explore every publication in the research index or open the classic homepage.</p><button id="fallback-papers" class="primary">Browse research ↗</button><a href="./">Classic view ↗</a><a href="world.html?v=20261019-preview-fit">Reload 3D view ↻</a></div>
+    <div id="fallback" class="fallback" hidden><h2>The research is still here.</h2><p>This browser couldn’t start the 3D world. Explore every publication in the research index or open the classic homepage.</p><button id="fallback-papers" class="primary">Browse research ↗</button><a href="./">Classic view ↗</a><a href="world.html?v=20261019-world-polish">Reload 3D view ↻</a></div>
     <div id="nearby" class="nearby" hidden><div><span class="eyebrow" id="nearby-category">RESEARCH OUTPOST</span><strong id="nearby-title"></strong></div><button id="preview-button" hidden>▷ Play preview</button><button id="interact-button"><kbd>E</kbd> Read paper <span>↗</span></button></div>
     <div id="drive-status" class="drive-status" role="status" aria-live="polite"></div>
     <div id="touch-controls" class="touch-controls" aria-label="Rover driving controls"><button data-drive="ArrowUp" aria-label="Drive forward">↑</button><button data-drive="ArrowLeft" aria-label="Steer left">←</button><button data-drive="ArrowDown" aria-label="Reverse">↓</button><button data-drive="ArrowRight" aria-label="Steer right">→</button></div>
@@ -61,7 +61,7 @@
       document.body.classList.remove('world-unavailable');
     }, {once:true});
     window.addEventListener('lunar:failed', () => clearTimeout(startupTimer), {once:true});
-    import('./world/app.js?v=20261019-preview-fit').catch(error => {clearTimeout(startupTimer); failStartup(error);});
+    import('./world/app.js?v=20261019-world-polish').catch(error => {clearTimeout(startupTimer); failStartup(error);});
   </script>
 </body>
 </html>

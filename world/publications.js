@@ -24,7 +24,7 @@ export const publications = [
     category: '3D RECONSTRUCTION', venue: 'NeurIPS 2026',
     description: 'Reconstructing geographically diverse architecture with 3D foundation models. A small monument to the many ways we build our world.',
     authors: 'Nicky Kriplani*, Yiwen Zhang*, Angelina Wang†, Hadar Averbuch-Elor†',
-    media: 'images/archworld.mp4',
+    media: 'images/archworld.mp4', playbackRate: 2,
     links: { 'Project': 'https://cornell-vailab.github.io/ArchWorld/', 'Paper ↗': 'https://arxiv.org/abs/2610.22514', 'Code': 'https://github.com/Cornell-VAILab/ArchWorld', 'Data': 'https://huggingface.co/datasets/ArchWorld/ArchWorld' },
   },
   {

@@ -1,4 +1,4 @@
-import { publications } from './publications.js?v=20261019-preview-fit';
+import { publications } from './publications.js?v=20261019-world-polish';
 
 const $ = (selector) => document.querySelector(selector);
 const dialogs = [...document.querySelectorAll('dialog')];
@@ -44,6 +44,11 @@ function openPaper(p) {
     ? `<video class="paper-media" src="${p.media}" aria-label="${escapeHTML(p.shortTitle)} research teaser" controls playsinline muted loop preload="metadata"></video>`
     : `<img class="paper-media" src="${p.media}" alt="${escapeHTML(p.title)} teaser">`;
   $('#paper-content').innerHTML = `<div class="paper-meta"><span class="paper-number" style="background:${p.color}">${p.index}</span><span>${p.category}</span><span> / ${p.venue}</span></div><h2 id="paper-title">${escapeHTML(p.title)}</h2><p class="paper-authors">${escapeHTML(p.authors)}</p>${media}<div class="paper-links">${Object.entries(p.links).map(([name,url]) => `<a href="${url}" target="_blank" rel="noopener noreferrer">${name}</a>`).join('')}</div>`;
+  const video = $('#paper-content video');
+  if (video) {
+    video.defaultPlaybackRate = Number(p.playbackRate) || 1;
+    video.playbackRate = video.defaultPlaybackRate;
+  }
   openDialog($('#paper-dialog'));
 }
 function renderIndex(query='') {
@@ -95,8 +100,8 @@ function failure(error) {
 }
 async function boot() {
   const [THREE, { createWorld }, motion, { createHologram }] = await Promise.all([
-    import('./vendor/three.module.min.js'), import('./scene.js?v=20261019-preview-fit'),
-    import('./spherical-motion.js?v=20261019-preview-fit'), import('./hologram.js?v=20261019-preview-fit'),
+    import('./vendor/three.module.min.js'), import('./scene.js?v=20261019-world-polish'),
+    import('./spherical-motion.js?v=20261019-world-polish'), import('./hologram.js?v=20261019-world-polish'),
   ]);
   const {advanceSurface, surfaceDistance, tangentTowards, surfaceQuaternion, createNavigator}=motion;
   const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});
