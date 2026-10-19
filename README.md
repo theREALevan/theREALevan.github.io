@@ -31,7 +31,7 @@ The 3D view opens directly to a small, centered planet with a prominent rover an
 | **?** | Open controls and the reduced-motion / autoplay setting |
 | **Source & credits** | Open the repository link, library attribution, and inspirations |
 
-On phones, use the on-screen arrow controls to drive immediately. Approaching a flag projects its video or image above the planet. Its **Read paper** button opens the full publication; clicking its 3D display while nearby does the same. Dialogs pause driving and preview playback and close with **Escape**, the close button, or a click outside. The map’s discovery count is stored locally in the browser.
+On phones, drag the 360° joystick to choose a direction. Push farther for more speed; release to recenter the stick and stop. Each gesture keeps a stable heading as the follow camera rotates. Approaching a flag projects its video or image above the planet. Its **Read paper** button opens the full publication; clicking its 3D display while nearby does the same. Dialogs pause driving and preview playback and close with **Escape**, the close button, or a click outside. The map’s discovery count is stored locally in the browser.
 
 If WebGL fails, the research index still works. The classic homepage is also linked from the fallback, the index, and a keyboard skip link; it remains available without JavaScript. The world respects the system’s reduced-motion preference, with an additional setting in the controls dialog. Reduced motion also pauses preview autoplay; **Play preview** remains available for explicit playback, including when the browser blocks autoplay.
 
@@ -49,6 +49,7 @@ This is a no-build static site: plain HTML, CSS, native JavaScript modules, and 
 | `world/spherical-motion.js` | Surface steering, rover orientation, spherical distances, and obstacle-aware routes |
 | `world/hologram.js` | Nearby video/image projection, playback lifecycle, and reduced-motion behavior |
 | `world/app.js` | Rendering, controls, camera damping, route/proximity coordination, and UI |
+| `world/joystick.js` | Analog touch input, pointer capture, and safe release / cancellation |
 | `world/style.css` | Responsive interface, typography, dialogs, and motion preferences |
 | `world/vendor/` | Locally vendored Three.js modules and license |
 | `tools/serve.py` | Local HTTP preview with video byte-range support |

@@ -333,7 +333,7 @@ export function createHologram(scene, world, { onChange } = {}) {
     // and moves offscreen when the close-follow camera looks over a flag.
     const viewportWidth = window.innerWidth, viewportHeight = window.innerHeight;
     const mobile = viewportWidth < 761;
-    const pixelWidth = Math.min(mobile ? 260 : 330, viewportWidth - 48);
+    const pixelWidth = mobile ? Math.min(210, viewportWidth * .56) : Math.min(330, viewportWidth - 48);
     const pixelsPerUnit = pixelWidth / WIDTH;
     cameraSpace.copy(panel.position).applyMatrix4(camera.matrixWorldInverse);
     const naturalPixelWidth = WIDTH * viewportWidth * camera.projectionMatrix.elements[0]

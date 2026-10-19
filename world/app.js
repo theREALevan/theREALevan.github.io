@@ -1,4 +1,4 @@
-import { publications } from './publications.js?v=20261019-world-polish';
+import { publications } from './publications.js?v=20261019-mobile-joystick';
 
 const $ = (selector) => document.querySelector(selector);
 const dialogs = [...document.querySelectorAll('dialog')];
@@ -99,9 +99,10 @@ function failure(error) {
   $('#nearby').hidden=true;worldAPI=null;
 }
 async function boot() {
-  const [THREE, { createWorld }, motion, { createHologram }] = await Promise.all([
-    import('./vendor/three.module.min.js'), import('./scene.js?v=20261019-world-polish'),
-    import('./spherical-motion.js?v=20261019-world-polish'), import('./hologram.js?v=20261019-world-polish'),
+  const [THREE, { createWorld }, motion, { createHologram }, { createJoystick }] = await Promise.all([
+    import('./vendor/three.module.min.js'), import('./scene.js?v=20261019-mobile-joystick'),
+    import('./spherical-motion.js?v=20261019-mobile-joystick'), import('./hologram.js?v=20261019-mobile-joystick'),
+    import('./joystick.js?v=20261019-mobile-joystick'),
   ]);
   const {advanceSurface, surfaceDistance, tangentTowards, surfaceQuaternion, createNavigator}=motion;
   const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});
@@ -127,6 +128,10 @@ async function boot() {
   const viewMatrix=new THREE.Matrix4(), cameraDirection=new THREE.Vector3(), orbitRotation=new THREE.Quaternion();
   const inverseCamera=new THREE.Quaternion(),projected=new THREE.Vector3(),pointer=new THREE.Vector2(),raycaster=new THREE.Raycaster();
   let speed=0, zoom=1, distance=100, yaw=0, pitch=0, nearby=null, route=[],destination=null,statusTimer=0,hidden=document.hidden;
+  let joystick=null;
+  const stickForward=new THREE.Vector3(),stickNormal=new THREE.Vector3();
+  const stickRight=new THREE.Vector3(),stickDesired=new THREE.Vector3(),stickCross=new THREE.Vector3();
+  const stickTransport=new THREE.Quaternion();
   let elapsed=0,animationFrame,previous=performance.now();
   const mapMarkers=[...$('#map-surface').querySelectorAll('.map-marker')];
   const starGeometry=new THREE.BufferGeometry(),starPositions=[];
@@ -155,14 +160,14 @@ async function boot() {
   function poseRover(){rover.position.copy(world.surfacePoint(normal));rover.quaternion.copy(surfaceQuaternion(normal,forward));}
   function status(text,seconds=4){$('#drive-status').textContent=text;statusTimer=seconds;}
   function explore(){renderer.domElement.focus({preventScroll:true});}
-  function pause(){keys.clear();speed=0;route=[];destination=null;status('');hologram.setActive(false);}
+  function pause(){joystick?.reset();keys.clear();speed=0;route=[];destination=null;status('');hologram.setActive(false);}
   function reset(){
     pause();normal.set(0,1,0);forward.set(0,0,-1);poseRover();yaw=0;pitch=0;zoom=1;
     nearby=null;hologram.setPublication(null);$('#nearby').hidden=true;tracks.count=0;trackIndex=0;trackDistance=0;
     updateCamera(0,true);explore();
   }
   function travel(p){
-    explore();const station=stations.get(p.id).userData.normal;
+    joystick?.reset();keys.clear();explore();const station=stations.get(p.id).userData.normal;
     if(surfaceDistance(normal,station,radius)<8.2){route=[];destination=null;speed=0;nearby=p;hologram.setPublication(p);status(`AT ${p.shortTitle} · Press E to read`,5);return;}
     // Stop outside the enlarged flag's footprint, on the side facing the rover.
     const tangent=tangentTowards(station,normal),angle=6.4/radius;
@@ -175,21 +180,26 @@ async function boot() {
   worldAPI={explore,reset,travel,interact,pause,togglePreview:()=>hologram.toggle()};
   const drivingKeys=new Set(['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space']);
   function manual(){if(destination){route=[];destination=null;status('Manual control');}}
+  joystick=createJoystick($('#drive-joystick'),{onStart(){
+    manual();keys.clear();
+    // Snapshot screen-up once per gesture, then transport it around the sphere.
+    // Using the moving follow camera every frame would make a held stick spiral.
+    stickNormal.copy(normal);
+    stickForward.set(0,1,0).applyQuaternion(camera.quaternion);
+    stickForward.addScaledVector(normal,-stickForward.dot(normal));
+    if(stickForward.lengthSq()<1e-6)stickForward.copy(forward);
+    stickForward.normalize();
+  }});
   window.addEventListener('keydown',e=>{
     if(modalOpen()||e.ctrlKey||e.altKey||e.metaKey||e.target.closest('input,textarea,select,[contenteditable="true"]'))return;
     if(e.target.closest('button,a')&&(e.code==='Enter'||e.code==='Space'))return;
-    if(drivingKeys.has(e.code)){e.preventDefault();explore();keys.add(e.code);manual();}
+    if(drivingKeys.has(e.code)){e.preventDefault();joystick.reset();explore();keys.add(e.code);manual();}
     if((e.code==='KeyE'||e.code==='Enter')&&!e.repeat){e.preventDefault();interact();}
     if(e.code==='KeyR'&&!e.repeat)reset();
   });
   window.addEventListener('keyup',e=>keys.delete(e.code));
   window.addEventListener('blur',()=>{keys.clear();speed=0;});
   document.addEventListener('visibilitychange',()=>{hidden=document.hidden;keys.clear();speed=0;if(hidden)hologram.setActive(false);});
-  for(const button of document.querySelectorAll('[data-drive]')){
-    button.addEventListener('pointerdown',e=>{e.preventDefault();button.setPointerCapture(e.pointerId);manual();keys.add(button.dataset.drive);});
-    const release=()=>keys.delete(button.dataset.drive);
-    for(const event of ['pointerup','pointercancel','lostpointercapture'])button.addEventListener(event,release);
-  }
   let drag=null;
   renderer.domElement.addEventListener('pointerdown',e=>{if(e.button!==0)return;drag={x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,moved:false};renderer.domElement.setPointerCapture(e.pointerId);});
   renderer.domElement.addEventListener('pointermove',e=>{
@@ -274,6 +284,7 @@ async function boot() {
   function tick(now){
     animationFrame=requestAnimationFrame(tick);const dt=Math.min((now-previous)/1000,.05);previous=now;
     if(hidden)return;const active=!modalOpen();elapsed+=dt;
+    const stick=joystick.getState();
     if(active){
       if(statusTimer>0){statusTimer-=dt;if(statusTimer<=0)$('#drive-status').textContent='';}
       let throttle=(keys.has('KeyW')||keys.has('ArrowUp')?1:0)-(keys.has('KeyS')||keys.has('ArrowDown')?1:0);
@@ -293,6 +304,17 @@ async function boot() {
           if(Math.abs(difference)>.23)speed=0;
         }
       }
+      if(stick.active&&stick.magnitude>0){
+        stickTransport.setFromUnitVectors(stickNormal,normal);
+        stickForward.applyQuaternion(stickTransport).addScaledVector(normal,-stickForward.dot(normal)).normalize();
+        stickNormal.copy(normal);
+        stickRight.crossVectors(stickForward,normal).normalize();
+        stickDesired.copy(stickForward).multiplyScalar(-stick.y).addScaledVector(stickRight,stick.x).normalize();
+        const alignment=THREE.MathUtils.clamp(forward.dot(stickDesired),-1,1);
+        const difference=Math.atan2(normal.dot(stickCross.crossVectors(forward,stickDesired)),alignment);
+        turn=THREE.MathUtils.clamp(difference,-dt*3.4,dt*3.4);
+        targetSpeed=6.8*stick.magnitude*Math.max(0,alignment)**2;
+      }
       if(keys.has('Space'))targetSpeed=0;
       speed=THREE.MathUtils.lerp(speed,targetSpeed,1-Math.exp(-dt*(keys.has('Space')?14:5)));
       if(Math.abs(speed)<.02)speed=0;
@@ -301,7 +323,7 @@ async function boot() {
       else{
         forward.applyAxisAngle(normal,turn).normalize();speed=0;
         if(destination){const retry=destination;route=[];destination=null;travel(retry);}
-        else if(throttle)status('A little room for the flag · steer around it',2);
+        else if(throttle||stick.magnitude>0)status('A little room for the flag · steer around it',2);
       }
       poseRover();trackDistance+=Math.abs(speed)*dt;if(trackDistance>.65){addTracks();trackDistance=0;}
       updateNearby();
@@ -315,7 +337,7 @@ async function boot() {
   window.__lunar={getState:()=>({ready:true,exploring:true,followRover:true,
     rover:{x:rover.position.x,y:rover.position.y,z:rover.position.z},normal:normal.toArray(),forward:forward.toArray(),
     surfaceError:Math.abs(rover.position.length()-world.surfaceRadius(normal)),orientationError:1-new THREE.Vector3(0,1,0).applyQuaternion(rover.quaternion).dot(normal),
-    radius,roverScale:rover.scale.x,stationScale:world.stationGroups[0].scale.x,speed,
+    radius,roverScale:rover.scale.x,stationScale:world.stationGroups[0].scale.x,speed,joystick:joystick.getState(),
     cameraLag:cameraRotation.angleTo(wantedRotation),planetScreen:origin.clone().project(camera).toArray(),
     nearby:nearby?.id??null,destination:destination?.id??null,routePoints:route.length,preview:hologram.getState(),
     visited:[...visited],drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,reducedMotion})};

@@ -75,7 +75,7 @@ async def travel(page, paper, through_index=False):
     await page.wait_for_timeout(200)
     bounds = (await state(page))['preview'].get('bounds')
     viewport = page.viewport_size
-    check(f'{title} hologram remains readable inside viewport', bounds and bounds['left'] >= 0 and bounds['top'] >= 0 and bounds['right'] <= viewport['width'] and bounds['bottom'] <= viewport['height'] and bounds['mediaWidth'] >= (210 if viewport['width'] < 761 else 260)-.1, bounds)
+    check(f'{title} hologram remains readable inside viewport', bounds and bounds['left'] >= 0 and bounds['top'] >= 0 and bounds['right'] <= viewport['width'] and bounds['bottom'] <= viewport['height'] and bounds['mediaWidth'] >= (170 if viewport['width'] < 761 else 260)-.1, bounds)
     if media_type == 'video':
         await page.wait_for_function('window.__lunar.getState().preview.playing', timeout=15000)
         first = (await state(page))['preview']['currentTime']
@@ -162,9 +162,10 @@ async def main():
             pose_check(f'{width}px globe stays centered', await state(page))
             await shot(page, f'planet-mobile-{width}')
             before = await state(page)
-            box = await page.locator('[data-drive="ArrowUp"]').bounding_box()
+            box = await page.locator('#drive-joystick').bounding_box()
             cdp = await context.new_cdp_session(page)
             await cdp.send('Input.dispatchTouchEvent', {'type': 'touchStart', 'touchPoints': [{'x': box['x']+box['width']/2, 'y': box['y']+box['height']/2}]})
+            await cdp.send('Input.dispatchTouchEvent', {'type': 'touchMove', 'touchPoints': [{'x': box['x']+box['width']/2, 'y': box['y']+box['height']*.1}]})
             await page.wait_for_timeout(900)
             await cdp.send('Input.dispatchTouchEvent', {'type': 'touchMove', 'touchPoints': [{'x': 10, 'y': 130}]})
             await cdp.send('Input.dispatchTouchEvent', {'type': 'touchEnd', 'touchPoints': []})

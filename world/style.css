@@ -225,3 +225,34 @@ dialog{color:#283533;background:#f3f0e7;border:0;border-radius:8px;max-height:88
 
 /* Match the shared view selector on the academic homepage. */
 .world-view .view-switch{background:#f3f4f1}
+
+/* The mobile joystick is a gesture surface, with no selectable arrow text. */
+#touch-controls,#touch-controls *{
+  -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:none;
+}
+#drive-joystick{
+  position:relative;display:block;width:112px;height:112px;padding:0;
+  border:1px solid #c9dcd044;border-radius:50%;overflow:visible;
+  background:radial-gradient(circle at 50% 45%,#304547b8,#17292ce8);
+  box-shadow:inset 0 0 0 9px #bed1c908,0 5px 22px #07121633;
+  color:#e0eee3;cursor:grab;
+}
+#drive-joystick::before,#drive-joystick::after{
+  content:"";position:absolute;inset:50% 12px auto;height:1px;background:#ccded817;pointer-events:none;
+}
+#drive-joystick::after{transform:rotate(90deg)}
+.joystick-guide{position:absolute;inset:20px;border:1px dashed #c3d9d329;border-radius:50%;pointer-events:none}
+.joystick-thumb{
+  position:absolute;left:50%;top:50%;display:grid;place-items:center;width:48px;height:48px;
+  border:1px solid #dce9dc8c;border-radius:50%;pointer-events:none;
+  background:linear-gradient(145deg,#96afa2,#5d7b74);box-shadow:0 4px 12px #0005,inset 0 1px 0 #eef6df80;
+  transform:translate(calc(-50% + var(--stick-x,0px)),calc(-50% + var(--stick-y,0px)));
+  transition:transform .16s ease-out,background .16s;
+}
+.joystick-thumb svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;pointer-events:none}
+#drive-joystick.is-active{border-color:#b6dccc99;cursor:grabbing}
+#drive-joystick.is-active .joystick-thumb{transition:none;background:linear-gradient(145deg,#bfd6bf,#789b89)}
+@media(max-width:760px){
+  .world-view #touch-controls{display:block;width:112px;height:112px;left:20px;bottom:107px;opacity:1;pointer-events:auto}
+}
+@media(prefers-reduced-motion:reduce){.joystick-thumb{transition:none}}
