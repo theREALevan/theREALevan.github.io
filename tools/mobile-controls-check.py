@@ -18,6 +18,7 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--url', default='http://127.0.0.1:8766/world.html')
 parser.add_argument('--report', type=Path, default=Path(__file__).with_suffix('.json'))
 parser.add_argument('--output-dir', type=Path)
+parser.add_argument('--obstacle-only', action='store_true', help='Only check reversing away from an outpost collision')
 args = parser.parse_args()
 out = args.output_dir or Path(tempfile.mkdtemp(prefix='mobile-controls-check-'))
 out.mkdir(parents=True, exist_ok=True)
@@ -42,6 +43,45 @@ async def shot(page, name):
     path = out / f'{name}.png'
     await page.screenshot(path=str(path))
     report['screenshots'].append(str(path))
+
+
+def dot(a, b):
+    return sum(x*y for x,y in zip(a,b))
+
+
+def cross(a, b):
+    return [a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]*b[0]]
+
+
+def movement(before, after):
+    """Measure displacement and yaw independently of the rover implementation.
+
+    Transport the starting heading along the shortest arc between sampled
+    normals, so ordinary curvature of the planet is not mistaken for steering.
+    """
+    n0,n1=before['normal'],after['normal']
+    f0,f1=before['forward'],after['forward']
+    axis=cross(n0,n1)
+    sine=math.sqrt(dot(axis,axis))
+    cosine=max(-1,min(1,dot(n0,n1)))
+    angle=math.atan2(sine,cosine)
+    transported=f0
+    if sine>1e-10:
+        axis=[x/sine for x in axis]
+        perpendicular=cross(axis,f0)
+        transported=[f0[i]*cosine+perpendicular[i]*sine+axis[i]*dot(axis,f0)*(1-cosine) for i in range(3)]
+    heading=math.atan2(dot(n1,cross(transported,f1)),dot(transported,f1))
+    signed_forward=after['radius']*angle*dot(n1,f0)/sine if sine>1e-10 else 0
+    return {'simulatedSeconds':after['simulationTime']-before['simulationTime'],
+            'signedForwardDistance':signed_forward,'surfaceDistance':after['radius']*angle,
+            'transportedHeadingRadians':heading,'headingAlignment':dot(transported,f1),
+            'speed':after['speed'],'joystick':after['joystick']}
+
+
+async def advance_time(page, start, seconds):
+    await page.wait_for_function('(end)=>window.__lunar.getState().simulationTime>=end',
+                                 arg=start['simulationTime']+seconds, timeout=20000)
+    return await state(page)
 
 
 class TouchStick:
@@ -70,6 +110,37 @@ class TouchStick:
         return await state(self.page)
 
 
+async def obstacle_reverse(page, stick, travel_started=False):
+    if not travel_started:
+        await page.keyboard.press('r')
+        await page.locator('#map-surface').get_by_role('button',name='Travel to MosaiChunk',exact=True).click()
+    await page.wait_for_function('''()=>{const s=window.__lunar.getState();
+      return s.destination===null && s.nearby==='mosaichunk' && Math.abs(s.speed)<.03}''',timeout=60000)
+    approach=await state(page)
+    await stick.start(0,-1)
+    await page.wait_for_function('''(start)=>{const s=window.__lunar.getState();
+      return Math.hypot(...s.normal.map((v,i)=>v-start[i]))>.02}''',arg=approach['normal'],timeout=15000)
+    await page.wait_for_function('Math.abs(window.__lunar.getState().speed)<.03',timeout=15000)
+    # A rejected large step can be followed by smaller acceleration steps that
+    # approach the boundary. Sample after that approach has settled.
+    first_contact=await state(page)
+    blocked=await advance_time(page,first_contact,1)
+    still_blocked=await advance_time(page,blocked,.3)
+    blocked_motion=movement(blocked,still_blocked)
+    check('forward throttle stops at the outpost obstacle',
+          blocked['joystick']['y']<-.9 and abs(still_blocked['speed'])<.03
+          and blocked_motion['surfaceDistance']<.03,blocked_motion)
+    await stick.send('touchMove',[stick.point(0,1)])
+    backed=await advance_time(page,still_blocked,1)
+    motion=movement(still_blocked,backed)
+    check('pulling down backs away from the obstacle without turning around',
+          motion['speed']<-1 and motion['signedForwardDistance']<-.5
+          and motion['headingAlignment']>.999 and abs(motion['transportedHeadingRadians'])<.02,motion)
+    await shot(page,'joystick-back-away-from-outpost')
+    await stick.end()
+    await stick.settled()
+
+
 async def main():
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True, args=flags)
@@ -90,6 +161,12 @@ async def main():
               style['tag']=='BUTTON' and bool(style['label']) and style['userSelect']=='none'
               and style['touchAction']=='none' and all(v=='none' for v in style['childSelect']), style)
 
+        if args.obstacle_only:
+            await obstacle_reverse(page,stick)
+            check('obstacle reverse has no uncaught JavaScript errors',not report['page_errors'],report['page_errors'])
+            await browser.close()
+            return
+
         await stick.start(0, -.03)
         await page.wait_for_timeout(250)
         center = await state(page)
@@ -97,54 +174,104 @@ async def main():
               center['joystick']['magnitude']==0 and abs(center['speed'])<.03, center['joystick'])
         await stick.end()
 
-        for name, x, y in [('up',0,-1), ('right',1,0), ('down',0,1),
-                            ('left',-1,0), ('diagonal',.7,-.7)]:
+        async def touch_sample(x,y,seconds=1.2,screenshot=None):
             await page.keyboard.press('r')
-            before = await state(page)
             await stick.start(x,y)
-            await page.wait_for_timeout(1200)
-            held = await state(page)
-            j = held['joystick']
-            signs = (abs(j['x'])<.01 if x==0 else j['x']*x>0) and (abs(j['y'])<.01 if y==0 else j['y']*y>0)
-            check(f'1.2 s {name} touch hold gives continuous direction and actual driving',
-                  j['active'] and j['magnitude']>.8 and signs
-                  and math.dist(before['normal'],held['normal'])>.001,
-                  {'joystick':j,'speed':held['speed'],'surfaceTravel':math.dist(before['normal'],held['normal'])*held['radius']})
-            check(f'{name} hold does not select page text', await page.evaluate('getSelection().toString()')=='')
-            if name=='diagonal':
-                await shot(page, 'joystick-held-390')
+            begin=await state(page)
+            held=await advance_time(page,begin,seconds)
+            result=movement(begin,held)
+            result['selection']=await page.evaluate('getSelection().toString()')
+            if screenshot:
+                await shot(page,screenshot)
             await stick.end()
             await stick.settled()
+            return result
+
+        async def keyboard_sample(keys,seconds=1.2):
+            await page.keyboard.press('r')
+            for key in keys:
+                await page.keyboard.down(key)
+            begin=await state(page)
+            held=await advance_time(page,begin,seconds)
+            result=movement(begin,held)
+            for key in keys:
+                await page.keyboard.up(key)
+            await page.keyboard.press('r')
+            return result
+
+        forward=await touch_sample(0,-1)
+        check('holding stick up drives forward without turning',
+              forward['speed']>2 and forward['signedForwardDistance']>1
+              and abs(forward['transportedHeadingRadians'])<.02,forward)
+        reverse=await touch_sample(0,1,screenshot='joystick-reverse-390')
+        check('holding stick down reverses behind current heading without a U-turn',
+              reverse['speed']<-1.5 and reverse['signedForwardDistance']<-.5
+              and reverse['headingAlignment']>.999 and abs(reverse['transportedHeadingRadians'])<.02,reverse)
+        check('forward and reverse long holds do not select page text',
+              forward['selection']=='' and reverse['selection']=='')
+        keyboard_reverse=await keyboard_sample(['s'])
+        reverse_ratio=(reverse['signedForwardDistance']/reverse['simulatedSeconds'])/(keyboard_reverse['signedForwardDistance']/keyboard_reverse['simulatedSeconds'])
+        check('joystick down matches keyboard S signed travel and heading',
+              keyboard_reverse['speed']<0 and keyboard_reverse['signedForwardDistance']<0
+              and .8<reverse_ratio<1.2
+              and abs(reverse['speed']-keyboard_reverse['speed'])<.2
+              and abs(reverse['transportedHeadingRadians']-keyboard_reverse['transportedHeadingRadians'])<.02,
+              {'joystick':reverse,'keyboardS':keyboard_reverse,'distancePerSecondRatio':reverse_ratio})
+
+        for name,x,turn_sign in [('left',-1,1),('right',1,-1)]:
+            turned=await touch_sample(x,0)
+            check(f'pure {name} stick rotates in place without propulsion',
+                  abs(turned['speed'])<.01 and turned['surfaceDistance']<.001
+                  and turned['transportedHeadingRadians']*turn_sign>.4,turned)
+
+        for name,x,y,keys,turn_sign in [
+                ('forward left',-.7,-.7,['w','a'],1),
+                ('forward right',.7,-.7,['w','d'],-1),
+                ('reverse left',-.7,.7,['s','a'],-1),
+                ('reverse right',.7,.7,['s','d'],1)]:
+            analog=await touch_sample(x,y,seconds=1)
+            keyboard=await keyboard_sample(keys,seconds=1)
+            signed_speed=-1 if y>0 else 1
+            analog_turn_rate=analog['transportedHeadingRadians']/analog['simulatedSeconds']
+            keyboard_turn_rate=keyboard['transportedHeadingRadians']/keyboard['simulatedSeconds']
+            # Analog diagonal steering has less than full horizontal deflection.
+            rate_ratio=analog_turn_rate/keyboard_turn_rate
+            check(f'{name} diagonal has the same vehicle turn and travel signs as keyboard',
+                  analog['speed']*signed_speed>1 and keyboard['speed']*signed_speed>1
+                  and analog['signedForwardDistance']*signed_speed>.2
+                  and keyboard['signedForwardDistance']*signed_speed>.2
+                  and analog['transportedHeadingRadians']*turn_sign>.2
+                  and keyboard['transportedHeadingRadians']*turn_sign>.2
+                  and abs(rate_ratio-abs(analog['joystick']['x']))<.15,
+                  {'joystick':analog,'keyboard':keyboard,'turnRateRatio':rate_ratio})
 
         await page.keyboard.press('r')
         await stick.start(0,-1)
-        previous=await state(page)
-        steering=[]
-        for x,y in [(0,-1),(1,0),(0,1)]:
-            await stick.send('touchMove',[stick.point(x,y)])
-            await page.wait_for_timeout(1000)
-            current=await state(page)
-            steering.append({'joystick':current['joystick'],
-                             'travel':math.dist(previous['normal'],current['normal'])*current['radius'],
-                             'headingChange':math.dist(previous['forward'],current['forward'])})
-            previous=current
-        check('one held gesture steers up then right then down without lifting',
-              all(s['joystick']['active'] and s['travel']>.01 for s in steering)
-              and steering[0]['joystick']['y']<-.9 and steering[1]['joystick']['x']>.9
-              and steering[2]['joystick']['y']>.9
-              and all(s['headingChange']>.2 for s in steering[1:]),steering)
+        begin=await state(page)
+        advancing=await advance_time(page,begin,.7)
+        await stick.send('touchMove',[stick.point(0,1)])
+        await page.wait_for_function('window.__lunar.getState().speed < -1',timeout=10000)
+        reversing=await state(page)
+        continued=await advance_time(page,reversing,.5)
+        change=movement(advancing,continued)
+        reverse_motion=movement(reversing,continued)
+        check('one held up-to-down gesture crosses into reverse without turning around',
+              advancing['speed']>2 and continued['speed']<-1 and continued['joystick']['active']
+              and reverse_motion['signedForwardDistance']<-.3
+              and abs(change['transportedHeadingRadians'])<.02 and change['headingAlignment']>.999,
+              {'forwardSpeed':advancing['speed'],'change':change,'reverseMotion':reverse_motion})
+        await stick.send('touchMove',[stick.point()])
+        await page.wait_for_function('Math.abs(window.__lunar.getState().speed)<.03',timeout=10000)
+        centered=await state(page)
+        check('returning held stick to center removes throttle and stops rover',
+              centered['joystick']['active'] and centered['joystick']['magnitude']==0 and abs(centered['speed'])<.03,centered['joystick'])
         await stick.end()
         await stick.settled()
 
         magnitudes=[]
         for label, amount in [('partial',.3),('full',1)]:
-            await page.keyboard.press('r')
-            await stick.start(0,-amount)
-            await page.wait_for_timeout(1200)
-            s=await state(page)
-            magnitudes.append({'label':label,'magnitude':s['joystick']['magnitude'],'speed':s['speed']})
-            await stick.end()
-            await stick.settled()
+            sample=await touch_sample(0,-amount)
+            magnitudes.append({'label':label,'magnitude':sample['joystick']['magnitude'],'speed':sample['speed'],'simulatedSeconds':sample['simulatedSeconds']})
         check('partial deflection drives slower than full deflection',
               0<magnitudes[0]['magnitude']<magnitudes[1]['magnitude'] and
               0<magnitudes[0]['speed']<magnitudes[1]['speed']*.8, magnitudes)
@@ -217,6 +344,7 @@ async def main():
               and (autopilot['destination']=='mosaichunk' or autopilot['nearby']=='mosaichunk'),
               {'joystick':autopilot['joystick'],'destination':autopilot['destination'],'nearby':autopilot['nearby']})
         await stick.end()
+        await obstacle_reverse(page,stick,travel_started=True)
         await page.keyboard.press('r')
         await stick.start(0,-1)
         await page.locator('#papers-button').click()

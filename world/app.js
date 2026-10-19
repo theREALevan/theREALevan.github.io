@@ -1,4 +1,4 @@
-import { publications } from './publications.js?v=20261019-mobile-joystick';
+import { publications } from './publications.js?v=20261019-vehicle-joystick';
 
 const $ = (selector) => document.querySelector(selector);
 const dialogs = [...document.querySelectorAll('dialog')];
@@ -100,9 +100,9 @@ function failure(error) {
 }
 async function boot() {
   const [THREE, { createWorld }, motion, { createHologram }, { createJoystick }] = await Promise.all([
-    import('./vendor/three.module.min.js'), import('./scene.js?v=20261019-mobile-joystick'),
-    import('./spherical-motion.js?v=20261019-mobile-joystick'), import('./hologram.js?v=20261019-mobile-joystick'),
-    import('./joystick.js?v=20261019-mobile-joystick'),
+    import('./vendor/three.module.min.js'), import('./scene.js?v=20261019-vehicle-joystick'),
+    import('./spherical-motion.js?v=20261019-vehicle-joystick'), import('./hologram.js?v=20261019-vehicle-joystick'),
+    import('./joystick.js?v=20261019-vehicle-joystick'),
   ]);
   const {advanceSurface, surfaceDistance, tangentTowards, surfaceQuaternion, createNavigator}=motion;
   const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});
@@ -129,9 +129,6 @@ async function boot() {
   const inverseCamera=new THREE.Quaternion(),projected=new THREE.Vector3(),pointer=new THREE.Vector2(),raycaster=new THREE.Raycaster();
   let speed=0, zoom=1, distance=100, yaw=0, pitch=0, nearby=null, route=[],destination=null,statusTimer=0,hidden=document.hidden;
   let joystick=null;
-  const stickForward=new THREE.Vector3(),stickNormal=new THREE.Vector3();
-  const stickRight=new THREE.Vector3(),stickDesired=new THREE.Vector3(),stickCross=new THREE.Vector3();
-  const stickTransport=new THREE.Quaternion();
   let elapsed=0,animationFrame,previous=performance.now();
   const mapMarkers=[...$('#map-surface').querySelectorAll('.map-marker')];
   const starGeometry=new THREE.BufferGeometry(),starPositions=[];
@@ -180,16 +177,7 @@ async function boot() {
   worldAPI={explore,reset,travel,interact,pause,togglePreview:()=>hologram.toggle()};
   const drivingKeys=new Set(['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space']);
   function manual(){if(destination){route=[];destination=null;status('Manual control');}}
-  joystick=createJoystick($('#drive-joystick'),{onStart(){
-    manual();keys.clear();
-    // Snapshot screen-up once per gesture, then transport it around the sphere.
-    // Using the moving follow camera every frame would make a held stick spiral.
-    stickNormal.copy(normal);
-    stickForward.set(0,1,0).applyQuaternion(camera.quaternion);
-    stickForward.addScaledVector(normal,-stickForward.dot(normal));
-    if(stickForward.lengthSq()<1e-6)stickForward.copy(forward);
-    stickForward.normalize();
-  }});
+  joystick=createJoystick($('#drive-joystick'),{onStart(){manual();keys.clear();}});
   window.addEventListener('keydown',e=>{
     if(modalOpen()||e.ctrlKey||e.altKey||e.metaKey||e.target.closest('input,textarea,select,[contenteditable="true"]'))return;
     if(e.target.closest('button,a')&&(e.code==='Enter'||e.code==='Space'))return;
@@ -289,6 +277,9 @@ async function boot() {
       if(statusTimer>0){statusTimer-=dt;if(statusTimer<=0)$('#drive-status').textContent='';}
       let throttle=(keys.has('KeyW')||keys.has('ArrowUp')?1:0)-(keys.has('KeyS')||keys.has('ArrowDown')?1:0);
       let steering=(keys.has('KeyA')||keys.has('ArrowLeft')?1:0)-(keys.has('KeyD')||keys.has('ArrowRight')?1:0);
+      // The stick is analog throttle + steering, matching WASD. Down must
+      // request reverse speed, rather than turning the rover toward a heading.
+      if(stick.active){throttle=-stick.y;steering=-stick.x;}
       let targetSpeed=throttle*(throttle>0?6.8:3.3),turn=steering*dt*1.65*(speed<-.1?-1:1);
       if(route.length){
         const remaining=surfaceDistance(normal,route[0],radius);
@@ -303,17 +294,6 @@ async function boot() {
           targetSpeed=Math.abs(difference)<.23?Math.min(6.2,surfaceDistance(normal,route[0],radius)*2.2):0;
           if(Math.abs(difference)>.23)speed=0;
         }
-      }
-      if(stick.active&&stick.magnitude>0){
-        stickTransport.setFromUnitVectors(stickNormal,normal);
-        stickForward.applyQuaternion(stickTransport).addScaledVector(normal,-stickForward.dot(normal)).normalize();
-        stickNormal.copy(normal);
-        stickRight.crossVectors(stickForward,normal).normalize();
-        stickDesired.copy(stickForward).multiplyScalar(-stick.y).addScaledVector(stickRight,stick.x).normalize();
-        const alignment=THREE.MathUtils.clamp(forward.dot(stickDesired),-1,1);
-        const difference=Math.atan2(normal.dot(stickCross.crossVectors(forward,stickDesired)),alignment);
-        turn=THREE.MathUtils.clamp(difference,-dt*3.4,dt*3.4);
-        targetSpeed=6.8*stick.magnitude*Math.max(0,alignment)**2;
       }
       if(keys.has('Space'))targetSpeed=0;
       speed=THREE.MathUtils.lerp(speed,targetSpeed,1-Math.exp(-dt*(keys.has('Space')?14:5)));
@@ -337,7 +317,7 @@ async function boot() {
   window.__lunar={getState:()=>({ready:true,exploring:true,followRover:true,
     rover:{x:rover.position.x,y:rover.position.y,z:rover.position.z},normal:normal.toArray(),forward:forward.toArray(),
     surfaceError:Math.abs(rover.position.length()-world.surfaceRadius(normal)),orientationError:1-new THREE.Vector3(0,1,0).applyQuaternion(rover.quaternion).dot(normal),
-    radius,roverScale:rover.scale.x,stationScale:world.stationGroups[0].scale.x,speed,joystick:joystick.getState(),
+    radius,roverScale:rover.scale.x,stationScale:world.stationGroups[0].scale.x,speed,simulationTime:elapsed,joystick:joystick.getState(),
     cameraLag:cameraRotation.angleTo(wantedRotation),planetScreen:origin.clone().project(camera).toArray(),
     nearby:nearby?.id??null,destination:destination?.id??null,routePoints:route.length,preview:hologram.getState(),
     visited:[...visited],drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,reducedMotion})};
